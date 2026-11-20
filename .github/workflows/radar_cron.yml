@@ -2,7 +2,9 @@ name: NASA Asteroid Radar Pipeline
 
 on:
   schedule:
+    # يعمل تلقائياً كل 6 ساعات
     - cron: '0 */6 * * *'
+  # يتيح التشغيل اليدوي الفوري من تبويب Actions
   workflow_dispatch:
 
 permissions:
@@ -28,11 +30,14 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run unit tests
+        env:
+          PYTHONPATH: .
         run: |
           pytest -v
 
       - name: Run NASA NeoWs & AI Simulation Pipeline
         env:
+          PYTHONPATH: .
           NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
